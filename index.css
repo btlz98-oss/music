@@ -1,0 +1,14 @@
+/* 기본 리셋 및 전역 스타일 */
+:root {
+  --primary: #fb923c;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  min-height: 100vh;
+}
