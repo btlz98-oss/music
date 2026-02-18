@@ -6,6 +6,8 @@ import { LessonHeader } from './lesson/LessonHeader';
 import { ActivitySection } from './lesson/ActivitySection';
 import { PromptSection } from './lesson/PromptSection';
 import { MemoSection } from './lesson/MemoSection';
+import { ResourceSection, ResourceLink } from './lesson/ResourceSection';
+import { CertificateGenerator } from './tools/CertificateGenerator';
 
 interface LessonPlanDisplayProps {
   lessonPlan: LessonPlan;
@@ -13,10 +15,12 @@ interface LessonPlanDisplayProps {
   selectedWeek: number;
   memo: string;
   onMemoChange: (value: string) => void;
+  links: ResourceLink[];
+  onLinksChange: (links: ResourceLink[]) => void;
 }
 
 export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
-  lessonPlan, selectedMonth, selectedWeek, memo, onMemoChange
+  lessonPlan, selectedMonth, selectedWeek, memo, onMemoChange, links, onLinksChange
 }) => {
   const [showInstrumentModal, setShowInstrumentModal] = useState(false);
 
@@ -35,7 +39,7 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
-          {/* Left Column: Info & Ref & Terms */}
+          {/* Left Column: Info & Ref & Terms & Resources */}
           <div className="md:col-span-1 space-y-6">
             
             {/* 학습 목표 */}
@@ -80,9 +84,19 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
               historyPrompts={lessonPlan.historySlidePrompts}
               quizPrompts={lessonPlan.quizSlidePrompts}
             />
+
+            {/* ⭐️ Resources (Moved to Bottom of Left Column) */}
+            <ResourceSection 
+                links={links} 
+                onLinksChange={onLinksChange}
+            />
+
+            {/* ⭐️ Certificate (Only Week 4) */}
+            {selectedWeek === 4 && <CertificateGenerator />}
+            
           </div>
 
-          {/* Right Column: Detailed Lesson Plan */}
+          {/* Right Column: Detailed Lesson Plan (Wider now because the outer sidebar is removed) */}
           <div className="md:col-span-2 space-y-6">
             
             {/* Intro */}

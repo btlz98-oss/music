@@ -5,8 +5,7 @@ import { SettingsModal } from './components/SettingsModal';
 import { YearlyPlanModal } from './components/YearlyPlanModal';
 import { LessonPlanDisplay } from './components/LessonPlanDisplay';
 import { ClassroomModeDisplay } from './components/ClassroomModeDisplay';
-import { ResourceSection, ResourceLink } from './components/lesson/ResourceSection';
-import { CertificateGenerator } from './components/tools/CertificateGenerator';
+import { ResourceLink } from './components/lesson/ResourceSection';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useLessonPlanGenerator } from './hooks/useLessonPlanGenerator';
 
@@ -122,7 +121,7 @@ const App = () => {
             </div>
           </div>
 
-          {/* ⭐️ Month/Week Selection (UI Restored) */}
+          {/* ⭐️ Month/Week Selection */}
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 print:hidden">
             <div className="bg-[#FFFBEB] p-6 rounded-2xl border border-stone-100 shadow-sm flex flex-col md:flex-row gap-8 md:gap-12 items-start">
               
@@ -171,36 +170,19 @@ const App = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3">
-             {/* Left Column: Lesson Plan Display */}
-             <div className="lg:col-span-2 border-r border-stone-200">
-                {lessonPlan && (
-                    <LessonPlanDisplay 
-                        lessonPlan={lessonPlan}
-                        selectedMonth={selectedMonth}
-                        selectedWeek={selectedWeek}
-                        memo={memos[lessonKey] || ''}
-                        onMemoChange={handleMemoChange}
-                    />
-                )}
-             </div>
-
-             {/* Right Column: Classroom Tools & Resources (Hidden in Print) */}
-             <div className="lg:col-span-1 bg-stone-50 p-6 space-y-6 print:hidden">
-                
-                {/* 1. Resources */}
-                <ResourceSection 
-                    links={linksMap[lessonKey] || []} 
+          {/* Main Content Area - Full Width */}
+          <div className="w-full">
+            {lessonPlan && (
+                <LessonPlanDisplay 
+                    lessonPlan={lessonPlan}
+                    selectedMonth={selectedMonth}
+                    selectedWeek={selectedWeek}
+                    memo={memos[lessonKey] || ''}
+                    onMemoChange={handleMemoChange}
+                    links={linksMap[lessonKey] || []}
                     onLinksChange={handleLinksChange}
                 />
-
-                {/* 2. Certificate (Only Week 4) */}
-                {selectedWeek === 4 && <CertificateGenerator />}
-
-                <div className="text-center text-stone-400 text-xs mt-8">
-                    <p>💡 팁: '수업 모드'를 켜면 큰 화면으로 수업을 진행할 수 있습니다.</p>
-                </div>
-             </div>
+            )}
           </div>
 
         </div>
