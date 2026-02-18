@@ -7,7 +7,6 @@ import { ActivitySection } from './lesson/ActivitySection';
 import { PromptSection } from './lesson/PromptSection';
 import { MemoSection } from './lesson/MemoSection';
 import { ResourceSection, ResourceLink } from './lesson/ResourceSection';
-import { CertificateGenerator } from './tools/CertificateGenerator';
 
 interface LessonPlanDisplayProps {
   lessonPlan: LessonPlan;
@@ -90,9 +89,6 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
                 links={links} 
                 onLinksChange={onLinksChange}
             />
-
-            {/* ⭐️ Certificate (Only Week 4) */}
-            {selectedWeek === 4 && <CertificateGenerator />}
             
           </div>
 
