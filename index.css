@@ -12,3 +12,82 @@ body {
 #root {
   min-height: 100vh;
 }
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* ⭐️ 인쇄 스타일 고도화 */
+@media print {
+  @page {
+    size: A4;
+    margin: 1cm;
+  }
+
+  body {
+    background-color: white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* 불필요한 요소 숨김 */
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* 그림자 제거 및 테두리 정리 */
+  .shadow-xl, .shadow-sm, .shadow-lg {
+    box-shadow: none !important;
+  }
+
+  /* 페이지 넘김 제어 */
+  h3, h4, .border-l-8, .activity-card {
+    break-after: avoid;
+  }
+  
+  li, p, .activity-step {
+    break-inside: avoid;
+  }
+  
+  /* 활동 카드가 페이지 중간에 잘리지 않도록 설정 */
+  .break-inside-avoid {
+      break-inside: avoid;
+  }
+
+  /* 인쇄 시 레이아웃 조정 */
+  .max-w-4xl, .max-w-6xl {
+    max-w: none !important;
+    width: 100% !important;
+  }
+  
+  /* 배경색 강제 적용 (Chrome 등) */
+  .bg-orange-50 { background-color: #fff7ed !important; }
+  .bg-yellow-50 { background-color: #fefce8 !important; }
+  .bg-blue-50 { background-color: #eff6ff !important; }
+  .bg-green-50 { background-color: #f0fdf4 !important; }
+  .bg-purple-50 { background-color: #faf5ff !important; }
+  .bg-red-50 { background-color: #fef2f2 !important; }
+  .bg-stone-50 { background-color: #fafaf9 !important; }
+}
