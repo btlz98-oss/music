@@ -9,6 +9,7 @@ import { ResourceLink } from './types';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useLessonPlanGenerator } from './hooks/useLessonPlanGenerator';
 import { downloadOfflinePackage } from './utils/offlinePackage';
+import { downloadProgramArchive } from './utils/programArchive';
 
 const App = () => {
   // ⭐️ Data Persistence
@@ -16,7 +17,7 @@ const App = () => {
   const [selectedWeek, setSelectedWeek] = useLocalStorage<number>('lessonWeek', 1);
   const [memos, setMemos] = useLocalStorage<Record<string, string>>('lessonMemos', {});
   const [linksMap, setLinksMap] = useLocalStorage<Record<string, ResourceLink[]>>('lessonLinks', {});
-  const [appMode, setAppMode] = useLocalStorage<'online' | 'offline'>('appMode', 'online');
+  const appMode: 'offline' = 'offline';
   const [isNetworkOnline, setIsNetworkOnline] = useState<boolean>(navigator.onLine);
 
   // UI State
@@ -48,6 +49,10 @@ const App = () => {
   const handleDownloadOfflinePackage = useCallback(() => {
     downloadOfflinePackage(curriculumData, memos, linksMap);
   }, [curriculumData, memos, linksMap]);
+
+  const handleDownloadProgramArchive = useCallback(() => {
+    downloadProgramArchive();
+  }, []);
 
   // Load custom curriculum on mount if exists
   useEffect(() => {
@@ -126,18 +131,9 @@ const App = () => {
                 <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2"><Music className="w-8 h-8" /> 두드림 리듬 탐험대</h1>
                 <p className="mt-1 text-orange-100 print:text-gray-600 font-medium text-sm md:text-base">초등돌봄교실 특기적성 프로그램 (강사: 김경미)</p>
                 <div className="mt-2 flex flex-wrap items-center gap-2 print:hidden">
-                  <button
-                    onClick={() => setAppMode('online')}
-                    className={`px-3 py-1 rounded-full text-xs font-bold border ${appMode === 'online' ? 'bg-green-600 border-green-600 text-white' : 'bg-white/20 border-white/50 text-white'}`}
-                  >
-                    온라인 모드
-                  </button>
-                  <button
-                    onClick={() => setAppMode('offline')}
-                    className={`px-3 py-1 rounded-full text-xs font-bold border ${appMode === 'offline' ? 'bg-stone-800 border-stone-800 text-white' : 'bg-white/20 border-white/50 text-white'}`}
-                  >
-                    오프라인 모드
-                  </button>
+                  <span className="px-3 py-1 rounded-full text-xs font-bold border bg-stone-800 border-stone-800 text-white">
+                    오프라인 전용 모드
+                  </span>
                   <span className="text-xs px-2 py-1 rounded-full bg-white/20">
                     네트워크: {isNetworkOnline ? '연결됨' : '끊김'}
                   </span>
@@ -146,7 +142,14 @@ const App = () => {
                     className="px-3 py-1 rounded-full text-xs font-bold border bg-white/20 border-white/50 text-white hover:bg-white/30 flex items-center gap-1"
                     title="3월~2월 전체 주차 내용을 태블릿용 단일 HTML로 저장"
                   >
-                    <Download size={12} /> 연간 오프라인 저장
+                    <Download size={12} /> 연간 오프라인 저장(index.html)
+                  </button>
+                  <button
+                    onClick={handleDownloadProgramArchive}
+                    className="px-3 py-1 rounded-full text-xs font-bold border bg-white/20 border-white/50 text-white hover:bg-white/30 flex items-center gap-1"
+                    title="앱 전체 로직과 프롬프트 코드 원문을 단일 HTML로 저장"
+                  >
+                    <Download size={12} /> 전체 로직/프롬프트 저장(index.html)
                   </button>
                 </div>
               </div>
@@ -170,8 +173,8 @@ const App = () => {
               <ol className="list-decimal pl-5 space-y-1">
                 <li>인터넷이 연결된 상태에서 이 페이지를 한 번 이상 열어 캐시를 만드세요. (오프라인 준비 완료 확인)</li>
                 <li>"태블릿에 앱 저장"으로 홈 화면 앱을 설치하세요.</li>
-                <li>"연간 오프라인 저장" 버튼을 눌러 <strong>월/주차 전체 포함 HTML</strong>을 파일앱에 저장하세요.</li>
-                <li>비행기 모드에서는 홈 화면 앱을 열거나, 파일앱에서 저장한 HTML을 열어 확인하세요.</li>
+                <li>"연간 오프라인 저장(index.html)" 버튼을 눌러 <strong>index.html 단일 파일</strong>을 파일앱에 저장하세요.</li>
+                <li>비행기 모드에서는 홈 화면 앱을 열거나, 파일앱의 <strong>index.html 하나만</strong> 열어 확인하세요.</li>
               </ol>
               <div className="bg-white/70 border border-amber-200 rounded-xl p-3">
                 <p className="font-semibold">오프라인 다운로드 파일 활용 팁</p>
