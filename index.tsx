@@ -15,10 +15,20 @@ root.render(
 );
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+  window.addEventListener('load', async () => {
     const swUrl = `${import.meta.env.BASE_URL}sw.js`;
-    navigator.serviceWorker.register(swUrl).catch((error) => {
+    try {
+      const registration = await navigator.serviceWorker.register(swUrl);
+      await registration.update();
+
+      let isRefreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (isRefreshing) return;
+        isRefreshing = true;
+        window.location.reload();
+      });
+    } catch (error) {
       console.error('ServiceWorker registration failed:', error);
-    });
+    }
   });
 }

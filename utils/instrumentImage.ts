@@ -13,6 +13,28 @@ const colorMap: Record<string, { bg: string; fg: string }> = {
   '앙상블': { bg: '#c084fc', fg: '#581c87' }
 };
 
+const encodeSvg = (svg: string) => `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+
+export const getOnlineInstrumentImage = (instrumentName: string) => {
+  const colors = colorMap[instrumentName] || { bg: '#e7e5e4', fg: '#44403c' };
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+      <defs>
+        <linearGradient id="onlineGrad" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="#fff7ed"/>
+          <stop offset="100%" stop-color="${colors.bg}"/>
+        </linearGradient>
+      </defs>
+      <rect width="200" height="200" fill="url(#onlineGrad)" rx="20" />
+      <circle cx="100" cy="75" r="30" fill="${colors.fg}" opacity="0.18" />
+      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="${colors.fg}" font-size="20" font-family="Inter, Arial, sans-serif" font-weight="700">${instrumentName}</text>
+      <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" fill="${colors.fg}" font-size="14" font-family="Inter, Arial, sans-serif">Online</text>
+    </svg>
+  `;
+
+  return encodeSvg(svg);
+};
+
 export const getOfflineInstrumentImage = (instrumentName: string) => {
   const colors = colorMap[instrumentName] || { bg: '#e7e5e4', fg: '#44403c' };
   const svg = `
@@ -23,6 +45,5 @@ export const getOfflineInstrumentImage = (instrumentName: string) => {
     </svg>
   `;
 
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  return encodeSvg(svg);
 };
-
