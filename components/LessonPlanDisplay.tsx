@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { Star, CheckCircle, Info, History, MessageCircleQuestion, Smile, Heart } from 'lucide-react';
-import { LessonPlan } from '../types';
+import { LessonPlan, ResourceLink } from '../types';
 import { InstrumentDetailModal } from './InstrumentDetailModal';
 import { LessonHeader } from './lesson/LessonHeader';
 import { ActivitySection } from './lesson/ActivitySection';
 import { PromptSection } from './lesson/PromptSection';
 import { MemoSection } from './lesson/MemoSection';
-import { ResourceSection, ResourceLink } from './lesson/ResourceSection';
+import { ResourceSection } from './lesson/ResourceSection';
 
 interface LessonPlanDisplayProps {
   lessonPlan: LessonPlan;
   selectedMonth: number;
   selectedWeek: number;
+  appMode: 'online' | 'offline';
   memo: string;
   onMemoChange: (value: string) => void;
   links: ResourceLink[];
@@ -19,7 +20,7 @@ interface LessonPlanDisplayProps {
 }
 
 export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
-  lessonPlan, selectedMonth, selectedWeek, memo, onMemoChange, links, onLinksChange
+  lessonPlan, selectedMonth, selectedWeek, appMode, memo, onMemoChange, links, onLinksChange
 }) => {
   const [showInstrumentModal, setShowInstrumentModal] = useState(false);
 
@@ -32,6 +33,7 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
           lessonPlan={lessonPlan}
           selectedMonth={selectedMonth}
           selectedWeek={selectedWeek}
+          appMode={appMode}
           onShowInstrumentModal={() => setShowInstrumentModal(true)}
         />
 
@@ -87,6 +89,7 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
             {/* ⭐️ Resources (Moved to Bottom of Left Column) */}
             <ResourceSection 
                 links={links} 
+                appMode={appMode}
                 onLinksChange={onLinksChange}
             />
             

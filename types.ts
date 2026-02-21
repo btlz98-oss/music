@@ -62,3 +62,9 @@ export interface LessonPlan {
   supplementary: { A: string; B: string };
   memo?: string;
 }
+
+export interface ResourceLink {
+  id: string;
+  title: string;
+  url: string;
+}

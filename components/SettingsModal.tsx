@@ -4,6 +4,7 @@ import { parseCSV } from '../utils/csvParser';
 
 interface SettingsModalProps {
   onClose: () => void;
+  onDownloadOfflinePackage: () => void;
   previewData: any;
   setPreviewData: (data: any) => void;
   setCurriculumData: (data: any) => void;
@@ -13,7 +14,7 @@ interface SettingsModalProps {
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({ 
-  onClose, previewData, setPreviewData, setCurriculumData, defaultCurriculumData, isDragOver, setIsDragOver 
+  onClose, onDownloadOfflinePackage, previewData, setPreviewData, setCurriculumData, defaultCurriculumData, isDragOver, setIsDragOver 
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const jsonInputRef = useRef<HTMLInputElement>(null);
@@ -103,6 +104,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // ⭐️ 데이터 백업/복구 로직
@@ -115,11 +117,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     };
     const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob);
+    link.href = url;
     link.download = `rhythm_explorer_backup_${new Date().toISOString().slice(0,10)}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const importData = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,9 +168,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <p className="text-xs text-stone-400">브라우저를 변경하거나 PC를 옮길 때 데이터를 안전하게 이동하세요.</p>
         </section>
 
+
+
         <hr className="border-stone-200" />
 
-        {/* 섹션 2: 커리큘럼 커스텀 */}
+        {/* 섹션 2: 태블릿 오프라인 모드 */}
+        <section className="text-center space-y-4">
+            <h3 className="text-lg font-bold text-stone-700 flex items-center justify-center gap-2"><Download size={20} /> 태블릿 오프라인 모드</h3>
+            <p className="text-sm text-stone-500">3월~2월 전체 주차를 단일 HTML로 저장하여 인터넷 없이 열람할 수 있습니다.</p>
+            <div className="flex justify-center">
+                <button onClick={onDownloadOfflinePackage} className="px-5 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 font-bold flex items-center gap-2">
+                    <Download size={18} /> 연간 오프라인 저장 (HTML)
+                </button>
+            </div>
+            <p className="text-xs text-stone-400">저장된 파일을 AirDrop/파일 앱/메신저로 태블릿에 옮겨 브라우저에서 열어보세요.</p>
+        </section>
+
+        <hr className="border-stone-200" />
+
+        {/* 섹션 3: 커리큘럼 커스텀 */}
         <section className="space-y-4">
             <div className="text-center">
                 <Settings className="w-12 h-12 text-stone-400 mx-auto mb-2" />

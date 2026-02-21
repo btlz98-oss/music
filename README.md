@@ -12,9 +12,45 @@ View your app in AI Studio: https://ai.studio/apps/drive/1AZ7n_qVBZk_zJYkwhHx2uU
 
 **Prerequisites:**  Node.js
 
-
 1. Install dependencies:
    `npm install`
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Tablet offline usage guide
+
+You can use this app on a tablet **without internet after the first setup**, but there are a few conditions.
+
+### Current limitations in this project
+- The app currently loads Tailwind CSS from a CDN script (`https://cdn.tailwindcss.com`) in `index.html`.
+- It also loads a Google Font from `fonts.googleapis.com`.
+- Instrument thumbnail images are external URLs (`https://placehold.co/...`).
+
+Because of these external resources, first load requires internet. Full guaranteed offline experience needs local bundling of those assets plus a service worker.
+
+### Practical way (easy)
+1. Build and deploy the app once (`npm run build` + host static files).
+2. Open it on the tablet while online.
+3. Keep the page/app installed in browser (Add to Home Screen).
+4. After initial load, core data and edits are saved in localStorage and can often be used offline.
+
+### Best way (recommended for true offline)
+1. Replace external CDN/font/image assets with local files.
+2. Add PWA support (manifest + service worker precache).
+3. Install from tablet browser as a home-screen app.
+
+Then the app can open reliably without network.
+
+## Online/Offline mode (new)
+
+- Header now provides **온라인 모드 / 오프라인 모드** toggle.
+- In 오프라인 모드:
+  - instrument thumbnail is switched to built-in SVG image (no external image request),
+  - external resource links are disabled to avoid dead clicks,
+  - current mode is persisted in localStorage.
+- Service worker (`public/sw.js`) is registered to cache app shell and visited local assets for repeat offline launches.
+- Added **연간 오프라인 저장** export (header + settings modal) that downloads a single HTML package containing **3월~2월 전체 주차(1~4주)** lesson content, memos, and saved links as text.
+- Downloaded HTML can be moved to tablet via AirDrop/파일 앱/메신저 and opened directly in browser offline.
+
+> Note: this is a practical offline mode. Some third-party resources in `index.html` are still external, so first load/update still works best online.
