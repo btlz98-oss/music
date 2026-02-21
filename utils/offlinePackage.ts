@@ -47,67 +47,52 @@ export const downloadOfflinePackage = (
           const history = instrumentHistories[instKey] || '';
 
           return `
-            <article class="week-card" data-month="${month}" data-week="${weekData.week}">
-              <div class="lesson-header">
-                <div>
-                  <span class="chip">${month}월 ${weekData.week}주차</span>
-                  <h2>${escapeHtml(weekData.title)}</h2>
-                  <p class="sub">${escapeHtml(theme)} · ${escapeHtml(instKey)}</p>
+            <article class="week-card" id="m${month}-w${weekData.week}" data-month="${month}" data-week="${weekData.week}">
+              <header class="lesson-head">
+                <div class="chip-row">
+                  <span class="chip chip-week">${month}월 ${weekData.week}주차</span>
+                  <span class="chip chip-inst">악기: ${escapeHtml(instKey)}</span>
+                  <span class="chip chip-focus">활동: ${escapeHtml(weekData.focus)}</span>
                 </div>
-                <p class="teacher">강사<br/><strong>김경미</strong></p>
-              </div>
+                <h4>${escapeHtml(weekData.title)}</h4>
+                <p class="objective">${escapeHtml(weekData.desc)}</p>
+              </header>
 
-              <div class="grid">
-                <section class="panel">
-                  <h4>학습 목표</h4>
+              <div class="lesson-grid">
+                <section class="panel soft">
+                  <h5>수업 목표</h5>
                   <p>${escapeHtml(weekData.desc)}</p>
                 </section>
+
                 <section class="panel">
-                  <h4>준비물</h4>
-                  <p>${escapeHtml(materials)}</p>
+                  <h5>수업 흐름</h5>
+                  <p><strong>도입:</strong> ${escapeHtml(intro)}</p>
+                  <div class="activity-box">
+                    <p><strong>전개:</strong></p>
+                    <ul>${main
+                      .map((activity) => `<li><strong>${escapeHtml(activity.title)}</strong><br/>${escapeHtml(activity.method)}</li>`)
+                      .join('')}</ul>
+                  </div>
+                  <p><strong>정리:</strong> ${escapeHtml(conclusion)}</p>
                 </section>
-                <section class="panel wide">
-                  <h4>어린이 용어 사전</h4>
-                  <ul>${terms.map((term) => `<li><strong>${escapeHtml(term.term)}</strong>: ${escapeHtml(term.desc)}</li>`).join('')}</ul>
+
+                <section class="panel warning">
+                  <h5>안전 약속</h5>
+                  <p>${escapeHtml(safety)}</p>
                 </section>
-              </div>
 
-              <section class="panel wide">
-                <h4>도입 (5분)</h4>
-                <p>${escapeHtml(intro).replaceAll('\n', '<br/>')}</p>
-              </section>
-
-              <section class="panel wide">
-                <h4>전개 (30분)</h4>
-                <ol>${main
-                  .map((activity) => `<li><strong>${escapeHtml(activity.title)}</strong> <span class="method">${escapeHtml(activity.method)}</span><br/>${activity.steps.map((step) => escapeHtml(step)).join('<br/>')}</li>`)
-                  .join('')}</ol>
-              </section>
-
-              <section class="panel wide">
-                <h4>정리 (5분)</h4>
-                <p>${escapeHtml(conclusion).replaceAll('\n', '<br/>')}</p>
-              </section>
-
-              <div class="grid">
-                <section class="panel wide">
-                  <h4>악기 시간 여행</h4>
+                <section class="panel">
+                  <h5>악기 시간 여행</h5>
                   <p>${escapeHtml(history).replaceAll('\n', '<br/>')}</p>
                 </section>
+
                 <section class="panel">
-                  <h4>선생님 꿀팁</h4>
-                  <p>${escapeHtml(tip)}</p>
+                  <h5>교사 메모</h5>
+                  <p>${escapeHtml(memo) || '메모 없음'}</p>
                 </section>
+
                 <section class="panel">
-                  <h4>안전 약속</h4>
-                  <p>${escapeHtml(safety).replaceAll('\n', '<br/>')}</p>
-                </section>
-                <section class="panel">
-                  <h4>메모</h4>
-                  <p>${escapeHtml(memo) || '없음'}</p>
-                </section>
-                <section class="panel">
-                  <h4>링크 메모</h4>
+                  <h5>링크 메모</h5>
                   <ul>${links.map((l) => `<li>${escapeHtml(l.title)} - ${escapeHtml(l.url)}</li>`).join('') || '<li>없음</li>'}</ul>
                 </section>
               </div>
@@ -162,78 +147,71 @@ export const downloadOfflinePackage = (
   </style>
 </head>
 <body>
-  <main class="container">
-    <header class="header">
-      <h1>♬ 두드림 리듬 탐험대</h1>
-      <p>초등돌봄교실 특기적성 프로그램 (강사: 김경미)</p>
-    </header>
-
+  <header class="app-header">
+    <h1>두드림 리듬 탐험대</h1>
+    <p class="desc">연간 오프라인 패키지 · 3월~2월, 1~4주차 전체 포함 · 생성일: ${new Date().toLocaleString('ko-KR')}</p>
+  </header>
+  <main class="layout">
+    <div class="toc"><strong>월 바로가기:</strong> ${toc}</div>
     <section class="controls">
-      <p class="desc">생성일: ${new Date().toLocaleString('ko-KR')} · 인터넷 없이 열람 가능<br/>월/주차를 클릭하면 현재 화면 형태 그대로 필요한 수업으로 바로 이동합니다.</p>
-      <div class="control-row" style="margin-top: 12px;">
-        <div class="field">
-          <h3>몇 월인가요?</h3>
-          <select id="monthSelect">${monthOptions}</select>
+      <h4>오프라인 수업 보기</h4>
+      <div class="controls-grid">
+        <div>
+          <label for="monthFilter">몇 월인가요?</label>
+          <select id="monthFilter" class="month-select">
+            <option value="all">전체 월</option>
+            ${monthOrder.map((m) => `<option value="${m}">${m}월 - ${escapeHtml(pickMonthData(m).theme || '')}</option>`).join('')}
+          </select>
         </div>
-        <div class="field">
-          <h3>월 빠른 이동</h3>
-          <div class="month-wrap">${monthButtons}</div>
-        </div>
-        <div class="field">
-          <h3>몇째 주인가요?</h3>
-          <div class="week-wrap">
-            <button class="week-btn" data-week="1">1주차</button>
-            <button class="week-btn" data-week="2">2주차</button>
-            <button class="week-btn" data-week="3">3주차</button>
-            <button class="week-btn" data-week="4">4주차</button>
+        <div>
+          <label>몇째 주인가요?</label>
+          <div class="week-buttons">
+            <button type="button" class="week-btn active" data-week-filter="all">전체 주차</button>
+            <button type="button" class="week-btn" data-week-filter="1">1주차</button>
+            <button type="button" class="week-btn" data-week-filter="2">2주차</button>
+            <button type="button" class="week-btn" data-week-filter="3">3주차</button>
+            <button type="button" class="week-btn" data-week-filter="4">4주차</button>
           </div>
         </div>
       </div>
     </section>
-
-    <section class="content" id="lessonRoot">${lessonMap}</section>
+    ${sections}
   </main>
   <script>
-    const monthSelect = document.getElementById('monthSelect');
-    const weekButtons = Array.from(document.querySelectorAll('.week-btn'));
-    const monthButtons = Array.from(document.querySelectorAll('.month-btn'));
-    const cards = Array.from(document.querySelectorAll('.week-card'));
-    let selectedMonth = Number(monthSelect.value);
-    let selectedWeek = 1;
+    (function() {
+      const monthSelect = document.getElementById('monthFilter');
+      const weekButtons = Array.from(document.querySelectorAll('.week-btn'));
+      const cards = Array.from(document.querySelectorAll('.week-card'));
+      let selectedWeek = 'all';
 
-    const render = () => {
-      cards.forEach((card) => {
-        const show = Number(card.dataset.month) === selectedMonth && Number(card.dataset.week) === selectedWeek;
-        card.hidden = !show;
+      const applyFilter = () => {
+        const selectedMonth = monthSelect.value;
+        cards.forEach((card) => {
+          const month = card.getAttribute('data-month');
+          const week = card.getAttribute('data-week');
+          const matchMonth = selectedMonth === 'all' || month === selectedMonth;
+          const matchWeek = selectedWeek === 'all' || week === selectedWeek;
+          card.style.display = matchMonth && matchWeek ? '' : 'none';
+        });
+
+        document.querySelectorAll('.month-section').forEach((section) => {
+          const hasVisible = section.querySelector('.week-card:not([style*="display: none"])');
+          section.style.display = hasVisible ? '' : 'none';
+        });
+      };
+
+      monthSelect.addEventListener('change', applyFilter);
+      weekButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          selectedWeek = btn.getAttribute('data-week-filter') || 'all';
+          weekButtons.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          applyFilter();
+        });
       });
-      weekButtons.forEach((btn) => btn.classList.toggle('active', Number(btn.dataset.week) === selectedWeek));
-      monthButtons.forEach((btn) => btn.classList.toggle('active', Number(btn.dataset.monthBtn) === selectedMonth));
-      monthSelect.value = String(selectedMonth);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
 
-    monthSelect.addEventListener('change', (e) => {
-      selectedMonth = Number(e.target.value);
-      selectedWeek = 1;
-      render();
-    });
-
-    weekButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        selectedWeek = Number(btn.dataset.week);
-        render();
-      });
-    });
-
-    monthButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        selectedMonth = Number(btn.dataset.monthBtn);
-        selectedWeek = 1;
-        render();
-      });
-    });
-
-    render();
+      applyFilter();
+    })();
   </script>
 </body>
 </html>`;
