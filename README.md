@@ -55,3 +55,8 @@ Then the app can open reliably without network.
 - Downloaded HTML can be moved to tablet via AirDrop/파일 앱/메신저 and opened directly in browser offline.
 
 > Note: this is a practical offline mode. Some third-party resources in `index.html` are still external, so first load/update still works best online.
+
+
+### Deployment cache note
+If a newly deployed screen looks identical to an old one, the browser may still be serving cached JS from a previous service worker.
+This project now uses a network-first strategy for same-origin assets in `public/sw.js` and forces a service worker update check in `index.tsx` on load so new deployments apply more reliably.
