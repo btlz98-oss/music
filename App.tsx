@@ -5,7 +5,7 @@ import { SettingsModal } from './components/SettingsModal';
 import { YearlyPlanModal } from './components/YearlyPlanModal';
 import { LessonPlanDisplay } from './components/LessonPlanDisplay';
 import { ClassroomModeDisplay } from './components/ClassroomModeDisplay';
-import { ResourceLink } from './components/lesson/ResourceSection';
+import { ResourceLink } from './types';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useLessonPlanGenerator } from './hooks/useLessonPlanGenerator';
 import { downloadOfflinePackage } from './utils/offlinePackage';
@@ -143,9 +143,9 @@ const App = () => {
                   <button
                     onClick={handleDownloadOfflinePackage}
                     className="px-3 py-1 rounded-full text-xs font-bold border bg-white/20 border-white/50 text-white hover:bg-white/30 flex items-center gap-1"
-                    title="현재 수업 데이터를 태블릿에서 열 수 있는 단일 HTML로 저장"
+                    title="3월~2월 전체 주차 내용을 태블릿용 단일 HTML로 저장"
                   >
-                    <Download size={12} /> 오프라인 파일 저장
+                    <Download size={12} /> 연간 오프라인 저장
                   </button>
                 </div>
               </div>

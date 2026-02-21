@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import { Youtube, Link as LinkIcon, Plus, Trash2, ExternalLink } from 'lucide-react';
-
-export interface ResourceLink {
-  id: string;
-  title: string;
-  url: string;
-}
+import { ResourceLink } from '../../types';
 
 interface ResourceSectionProps {
   links: ResourceLink[];

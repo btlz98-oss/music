@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Star, CheckCircle, Info, History, MessageCircleQuestion, Smile, Heart } from 'lucide-react';
-import { LessonPlan } from '../types';
+import { LessonPlan, ResourceLink } from '../types';
 import { InstrumentDetailModal } from './InstrumentDetailModal';
 import { LessonHeader } from './lesson/LessonHeader';
 import { ActivitySection } from './lesson/ActivitySection';
 import { PromptSection } from './lesson/PromptSection';
 import { MemoSection } from './lesson/MemoSection';
-import { ResourceSection, ResourceLink } from './lesson/ResourceSection';
+import { ResourceSection } from './lesson/ResourceSection';
 
 interface LessonPlanDisplayProps {
   lessonPlan: LessonPlan;
