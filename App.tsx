@@ -9,6 +9,7 @@ import { ResourceLink } from './types';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useLessonPlanGenerator } from './hooks/useLessonPlanGenerator';
 import { downloadOfflinePackage } from './utils/offlinePackage';
+import { downloadProgramArchive } from './utils/programArchive';
 
 const App = () => {
   // ⭐️ Data Persistence
@@ -48,6 +49,10 @@ const App = () => {
   const handleDownloadOfflinePackage = useCallback(() => {
     downloadOfflinePackage(curriculumData, memos, linksMap);
   }, [curriculumData, memos, linksMap]);
+
+  const handleDownloadProgramArchive = useCallback(() => {
+    downloadProgramArchive();
+  }, []);
 
   // Load custom curriculum on mount if exists
   useEffect(() => {
@@ -138,6 +143,13 @@ const App = () => {
                     title="3월~2월 전체 주차 내용을 태블릿용 단일 HTML로 저장"
                   >
                     <Download size={12} /> 연간 오프라인 저장
+                  </button>
+                  <button
+                    onClick={handleDownloadProgramArchive}
+                    className="px-3 py-1 rounded-full text-xs font-bold border bg-white/20 border-white/50 text-white hover:bg-white/30 flex items-center gap-1"
+                    title="앱 전체 로직과 프롬프트 코드 원문을 단일 HTML로 저장"
+                  >
+                    <Download size={12} /> 전체 로직/프롬프트 저장
                   </button>
                 </div>
               </div>
