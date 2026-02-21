@@ -10,12 +10,6 @@ import { useLocalStorage } from './hooks/useLocalStorage';
 import { useLessonPlanGenerator } from './hooks/useLessonPlanGenerator';
 import { downloadOfflinePackage } from './utils/offlinePackage';
 
-interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: string[];
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
-}
-
 const App = () => {
   // ⭐️ Data Persistence
   const [selectedMonth, setSelectedMonth] = useLocalStorage<number>('lessonMonth', 3);
@@ -24,8 +18,6 @@ const App = () => {
   const [linksMap, setLinksMap] = useLocalStorage<Record<string, ResourceLink[]>>('lessonLinks', {});
   const [appMode, setAppMode] = useLocalStorage<'online' | 'offline'>('appMode', 'online');
   const [isNetworkOnline, setIsNetworkOnline] = useState<boolean>(navigator.onLine);
-  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isOfflineReady, setIsOfflineReady] = useState(false);
 
   // UI State
   const [showSettings, setShowSettings] = useState(false);
@@ -57,13 +49,6 @@ const App = () => {
     downloadOfflinePackage(curriculumData, memos, linksMap);
   }, [curriculumData, memos, linksMap]);
 
-  const handleInstallApp = useCallback(async () => {
-    if (!installPrompt) return;
-    await installPrompt.prompt();
-    await installPrompt.userChoice;
-    setInstallPrompt(null);
-  }, [installPrompt]);
-
   // Load custom curriculum on mount if exists
   useEffect(() => {
     const stored = window.localStorage.getItem('curriculumData');
@@ -80,34 +65,6 @@ const App = () => {
     return () => {
       window.removeEventListener('online', onOnline);
       window.removeEventListener('offline', onOffline);
-    };
-  }, []);
-
-  useEffect(() => {
-    const onBeforeInstallPrompt = (event: Event) => {
-      event.preventDefault();
-      setInstallPrompt(event as BeforeInstallPromptEvent);
-    };
-
-    const onAppInstalled = () => {
-      setInstallPrompt(null);
-    };
-
-    const onServiceWorkerReady = () => {
-      setIsOfflineReady(true);
-    };
-
-    if (navigator.serviceWorker?.controller) {
-      setIsOfflineReady(true);
-    }
-
-    navigator.serviceWorker?.ready.then(onServiceWorkerReady).catch(() => {});
-    window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt);
-    window.addEventListener('appinstalled', onAppInstalled);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', onAppInstalled);
     };
   }, []);
 
@@ -151,6 +108,7 @@ const App = () => {
               defaultCurriculumData={defaultCurriculumData}
               isDragOver={isDragOver}
               setIsDragOver={setIsDragOver}
+              onDownloadOfflinePackage={handleDownloadOfflinePackage}
             />
           )}
           {showYearlyPlan && (
@@ -183,17 +141,6 @@ const App = () => {
                   <span className="text-xs px-2 py-1 rounded-full bg-white/20">
                     네트워크: {isNetworkOnline ? '연결됨' : '끊김'}
                   </span>
-                  <span className={`text-xs px-2 py-1 rounded-full ${isOfflineReady ? 'bg-emerald-600/80' : 'bg-white/20'}`}>
-                    오프라인 준비: {isOfflineReady ? '완료' : '동기화 중'}
-                  </span>
-                  <button
-                    onClick={handleInstallApp}
-                    disabled={!installPrompt}
-                    className={`px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-1 ${installPrompt ? 'bg-white/20 border-white/50 text-white hover:bg-white/30' : 'bg-white/10 border-white/30 text-orange-100 cursor-not-allowed'}`}
-                    title="홈 화면에 앱을 추가하면 태블릿에서도 앱처럼 실행할 수 있습니다"
-                  >
-                    태블릿에 앱 저장
-                  </button>
                   <button
                     onClick={handleDownloadOfflinePackage}
                     className="px-3 py-1 rounded-full text-xs font-bold border bg-white/20 border-white/50 text-white hover:bg-white/30 flex items-center gap-1"
