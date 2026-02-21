@@ -56,7 +56,30 @@ Then the app can open reliably without network.
 
 > Note: this is a practical offline mode. Some third-party resources in `index.html` are still external, so first load/update still works best online.
 
+## Troubleshooting: `Process completed with exit code 1` (Codex/Agent + MCP)
 
-### Deployment cache note
-If a newly deployed screen looks identical to an old one, the browser may still be serving cached JS from a previous service worker.
-This project now uses a network-first strategy for same-origin assets in `public/sw.js` and forces a service worker update check in `index.tsx` on load so new deployments apply more reliably.
+`exit code 1` is usually only a symptom. The actual root cause is typically in **stderr**.
+
+### Quick triage order
+1. Check full stderr logs (not stdout only).
+2. Search for these common patterns:
+   - `Server exited before responding to initialize request`
+   - `Invalid MCP server config: missing required "type" field`
+   - `performance is not defined` / `Stream closed`
+   - `ConnectTimeoutError`
+3. Confirm runtime baseline:
+   - Node.js >= 18 (Node 20 recommended)
+   - MCP server config has required fields (including `type` for url servers)
+
+### Local helper script
+
+Use the included script to print the latest log tail and detect common failure keywords:
+
+```bash
+npm run diagnose:exit1 -- path/to/agent.log
+# or
+bash scripts/diagnose-exit1.sh path/to/agent.log
+```
+
+### CI/network hint (GitHub Actions)
+If your environment is behind a proxy/firewall, configure `HTTPS_PROXY` and increase MCP startup timeout in workflow env.
