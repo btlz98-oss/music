@@ -12,6 +12,7 @@ interface LessonPlanDisplayProps {
   lessonPlan: LessonPlan;
   selectedMonth: number;
   selectedWeek: number;
+  appMode: 'online' | 'offline';
   memo: string;
   onMemoChange: (value: string) => void;
   links: ResourceLink[];
@@ -19,7 +20,7 @@ interface LessonPlanDisplayProps {
 }
 
 export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
-  lessonPlan, selectedMonth, selectedWeek, memo, onMemoChange, links, onLinksChange
+  lessonPlan, selectedMonth, selectedWeek, appMode, memo, onMemoChange, links, onLinksChange
 }) => {
   const [showInstrumentModal, setShowInstrumentModal] = useState(false);
 
@@ -32,6 +33,7 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
           lessonPlan={lessonPlan}
           selectedMonth={selectedMonth}
           selectedWeek={selectedWeek}
+          appMode={appMode}
           onShowInstrumentModal={() => setShowInstrumentModal(true)}
         />
 
@@ -87,6 +89,7 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
             {/* ⭐️ Resources (Moved to Bottom of Left Column) */}
             <ResourceSection 
                 links={links} 
+                appMode={appMode}
                 onLinksChange={onLinksChange}
             />
             

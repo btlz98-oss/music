@@ -9,10 +9,11 @@ export interface ResourceLink {
 
 interface ResourceSectionProps {
   links: ResourceLink[];
+  appMode: 'online' | 'offline';
   onLinksChange: (links: ResourceLink[]) => void;
 }
 
-export const ResourceSection: React.FC<ResourceSectionProps> = ({ links, onLinksChange }) => {
+export const ResourceSection: React.FC<ResourceSectionProps> = ({ links, appMode, onLinksChange }) => {
   const [newTitle, setNewTitle] = useState('');
   const [newUrl, setNewUrl] = useState('');
 
@@ -41,7 +42,15 @@ export const ResourceSection: React.FC<ResourceSectionProps> = ({ links, onLinks
       <div className="space-y-3 mb-4">
         {links.map(link => (
           <div key={link.id} className="flex items-center justify-between bg-white p-3 rounded-lg border border-sky-100 shadow-sm group">
-            <a href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sky-700 hover:text-sky-900 font-medium truncate flex-1">
+            <a
+              href={appMode === 'offline' ? undefined : link.url}
+              target={appMode === 'offline' ? undefined : '_blank'}
+              rel="noopener noreferrer"
+              className={`flex items-center gap-2 font-medium truncate flex-1 ${appMode === 'offline' ? 'text-stone-400 cursor-not-allowed' : 'text-sky-700 hover:text-sky-900'}`}
+              onClick={(e) => {
+                if (appMode === 'offline') e.preventDefault();
+              }}
+            >
               {link.url.includes('youtube') || link.url.includes('youtu.be') ? <Youtube size={16} className="text-red-500" /> : <LinkIcon size={16} />}
               {link.title} <ExternalLink size={12} className="opacity-50" />
             </a>
@@ -73,6 +82,9 @@ export const ResourceSection: React.FC<ResourceSectionProps> = ({ links, onLinks
           <Plus size={16} />
         </button>
       </div>
+      {appMode === 'offline' && (
+        <p className="text-xs text-stone-500 mt-2">오프라인 모드에서는 외부 링크 열기가 비활성화됩니다.</p>
+      )}
     </div>
   );
 };

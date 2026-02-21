@@ -1,11 +1,13 @@
 import React from 'react';
 import { Info } from 'lucide-react';
 import { LessonPlan } from '../../types';
+import { getOfflineInstrumentImage } from '../../utils/instrumentImage';
 
 interface LessonHeaderProps {
   lessonPlan: LessonPlan;
   selectedMonth: number;
   selectedWeek: number;
+  appMode: 'online' | 'offline';
   onShowInstrumentModal: () => void;
 }
 
@@ -13,14 +15,19 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
   lessonPlan,
   selectedMonth,
   selectedWeek,
+  appMode,
   onShowInstrumentModal
 }) => {
+  const imageSrc = appMode === 'offline'
+    ? getOfflineInstrumentImage(lessonPlan.instrumentName)
+    : (lessonPlan.refData.imageUrl || getOfflineInstrumentImage(lessonPlan.instrumentName));
+
   return (
     <div className="border-b-2 border-stone-800 pb-4 mb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
       <div className="flex items-start gap-6">
         {lessonPlan.refData?.imageUrl && (
           <img
-            src={lessonPlan.refData.imageUrl}
+            src={imageSrc}
             alt={lessonPlan.instrumentName}
             loading="lazy"
             className="w-24 h-24 rounded-2xl object-cover border border-stone-200 shadow-sm hidden sm:block print:hidden"

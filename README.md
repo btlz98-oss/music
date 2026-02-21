@@ -41,3 +41,14 @@ Because of these external resources, first load requires internet. Full guarante
 3. Install from tablet browser as a home-screen app.
 
 Then the app can open reliably without network.
+
+## Online/Offline mode (new)
+
+- Header now provides **온라인 모드 / 오프라인 모드** toggle.
+- In 오프라인 모드:
+  - instrument thumbnail is switched to built-in SVG image (no external image request),
+  - external resource links are disabled to avoid dead clicks,
+  - current mode is persisted in localStorage.
+- Service worker (`public/sw.js`) is registered to cache app shell and visited local assets for repeat offline launches.
+
+> Note: this is a practical offline mode. Some third-party resources in `index.html` are still external, so first load/update still works best online.
