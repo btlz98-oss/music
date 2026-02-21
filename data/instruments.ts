@@ -5,73 +5,73 @@ export const instrumentEncyclopedia: Record<string, InstrumentRefData> = {
     origin: "가장 오래된 악기예요. 도구 없이 몸으로 소리를 내요.", 
     types: ["손뼉(짝짝)", "발구르기(쿵쿵)", "무릎치기(투닥)", "어깨치기(톡톡)"], 
     tip: "아프지 않게 살살 치면서 소리의 차이를 느껴보게 해주세요.",
-    imageUrl: "/instrument-placeholder.svg"
+    imageUrl: "https://placehold.co/200x200/fca5a5/7f1d1d?text=Body+Percussion"
   },
   "쉐이커": { 
     origin: "열매 속에 씨앗을 넣어 흔들던 것에서 시작됐어요.", 
     types: ["마라카스(손잡이)", "에그 쉐이커(달걀 모양)"], 
     tip: "손목을 이용해 '촥촥' 소리를 내야 예쁜 소리가 나요.",
-    imageUrl: "/instrument-placeholder.svg" 
+    imageUrl: "https://placehold.co/200x200/fcd34d/78350f?text=Shaker" 
   },
   "우드블록/캐스터네츠": { 
     origin: "나무로 만든 악기예요. 맑고 또랑또랑한 소리가 나요.", 
     types: ["우드블록(말발굽 소리)", "캐스터네츠(조개 모양)"], 
     tip: "너무 세게 치지 않고 통통 튀기듯이 연주해요.",
-    imageUrl: "/instrument-placeholder.svg"
+    imageUrl: "https://placehold.co/200x200/d6d3d1/44403c?text=Woodblock"
   },
   "탬버린": { 
     origin: "북처럼 칠 수도 있고, 찰랑찰랑 흔들 수도 있어요.", 
     types: ["가죽 탬버린", "리듬 탬버린(테두리만 있음)"], 
     tip: "흔들 때와 칠 때의 소리가 어떻게 다른지 비교해요.",
-    imageUrl: "/instrument-placeholder.svg"
+    imageUrl: "https://placehold.co/200x200/f9a8d4/831843?text=Tambourine"
   },
   "트라이앵글": { 
     origin: "세모난 금속 악기예요. 은방울처럼 고운 소리가 나요.", 
     types: ["강철 트라이앵글"], 
     tip: "줄을 잡아야 소리가 길게 울려요. 악기를 손으로 잡으면 소리가 멈춰요.",
-    imageUrl: "/instrument-placeholder.svg"
+    imageUrl: "https://placehold.co/200x200/cbd5e1/1e293b?text=Triangle"
   },
   "라틴 퍼커션": { 
     origin: "더운 나라에서 온 신나는 리듬 악기들이에요.", 
     types: ["카우벨(종)", "아고고", "귀로(빨래판 소리)"], 
     tip: "몸을 흔들면서 신나게 연주해요.",
-    imageUrl: "/instrument-placeholder.svg"
+    imageUrl: "https://placehold.co/200x200/fda4af/881337?text=Latin+Percussion"
   },
   "창의 리듬": { 
     origin: "우리 주변의 모든 물건이 악기가 될 수 있어요.", 
     types: ["책상 드럼", "필통 흔들기", "종이 비기기"], 
     tip: "정답은 없어요! 아이들의 상상력을 칭찬해주세요.",
-    imageUrl: "/instrument-placeholder.svg"
+    imageUrl: "https://placehold.co/200x200/93c5fd/1e3a8a?text=Creative"
   },
   "북(젬베)": { 
     origin: "아프리카에서 온 물잔 모양의 북이에요.", 
     types: ["젬베", "콩가", "봉고"], 
     tip: "손바닥 전체로 치는 '베이스'와 손가락으로 치는 '톤'을 구분해요.",
-    imageUrl: "/instrument-placeholder.svg"
+    imageUrl: "https://placehold.co/200x200/86efac/14532d?text=Djembe"
   },
   "붐와커": {
     origin: "플라스틱 파이프의 길이에 따라 도레미 소리가 달라지는 신기한 악기예요.",
     types: ["C장조 세트", "반음계 세트"],
     tip: "바닥이나 몸을 가볍게 두드려 소리를 내요. 모서리에 치면 악기가 아파해요.",
-    imageUrl: "/instrument-placeholder.svg"
+    imageUrl: "https://placehold.co/200x200/f87171/991b1b?text=Boomwhackers"
   },
   "핸드벨": {
     origin: "교회 종탑의 큰 종을 연습하기 위해 작게 만든 것이 시초예요.",
     types: ["핸드벨(흔들기)", "터치벨(누르기)"],
     tip: "가슴 앞에서 예쁘게 원을 그리며 흔들어주세요.",
-    imageUrl: "/instrument-placeholder.svg"
+    imageUrl: "https://placehold.co/200x200/fbbf24/b45309?text=Handbells"
   },
   "전통 타악기": {
     origin: "우리나라 조상님들이 농사를 짓거나 축제를 할 때 연주했어요.",
     types: ["소고(작은 북)", "장구(모래시계 모양)", "북"],
     tip: "장단을 입으로 먼저 익히고(구음) 치면 더 잘 돼요.",
-    imageUrl: "/instrument-placeholder.svg"
+    imageUrl: "https://placehold.co/200x200/a78bfa/5b21b6?text=Tradition"
   },
   "앙상블": { 
     origin: "친구들과 마음을 모아 함께 연주하는 것을 말해요.", 
     types: ["합주", "이어치기"], 
     tip: "내 소리보다 친구의 소리를 잘 듣는 게 제일 중요해요.",
-    imageUrl: "/instrument-placeholder.svg"
+    imageUrl: "https://placehold.co/200x200/c084fc/581c87?text=Ensemble"
   }
 };
 

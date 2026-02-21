@@ -24,7 +24,8 @@ You can use this app on a tablet **without internet after the first setup**, but
 
 ### Current limitations in this project
 - The app currently loads Tailwind CSS from a CDN script (`https://cdn.tailwindcss.com`) in `index.html`.
-- Instrument thumbnail images are now bundled as local SVG assets (`public/instrument-placeholder.svg`).
+- It also loads a Google Font from `fonts.googleapis.com`.
+- Instrument thumbnail images are external URLs (`https://placehold.co/...`).
 
 Because of these external resources, first load requires internet. Full guaranteed offline experience needs local bundling of those assets plus a service worker.
 
@@ -49,7 +50,7 @@ Then the app can open reliably without network.
   - external resource links are disabled to avoid dead clicks,
   - current mode is persisted in localStorage.
 - Service worker (`public/sw.js`) is registered to cache app shell and visited local assets for repeat offline launches.
-- Added **연간 오프라인 저장** button that downloads a single HTML package containing **3월~2월 전체 주차(1~4주)** lesson content, memos, and saved links as text.
+- Added **연간 오프라인 저장** export (header + settings modal) that downloads a single HTML package containing **3월~2월 전체 주차(1~4주)** lesson content, memos, and saved links as text.
 - Downloaded HTML can be moved to tablet via AirDrop/파일 앱/메신저 and opened directly in browser offline.
 
 > Note: this is a practical offline mode. Some third-party resources in `index.html` are still external, so first load/update still works best online.
