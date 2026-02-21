@@ -8,6 +8,7 @@ import { ClassroomModeDisplay } from './components/ClassroomModeDisplay';
 import { ResourceLink } from './components/lesson/ResourceSection';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useLessonPlanGenerator } from './hooks/useLessonPlanGenerator';
+import { downloadOfflinePackage } from './utils/offlinePackage';
 
 const App = () => {
   // ⭐️ Data Persistence
@@ -15,6 +16,8 @@ const App = () => {
   const [selectedWeek, setSelectedWeek] = useLocalStorage<number>('lessonWeek', 1);
   const [memos, setMemos] = useLocalStorage<Record<string, string>>('lessonMemos', {});
   const [linksMap, setLinksMap] = useLocalStorage<Record<string, ResourceLink[]>>('lessonLinks', {});
+  const [appMode, setAppMode] = useLocalStorage<'online' | 'offline'>('appMode', 'online');
+  const [isNetworkOnline, setIsNetworkOnline] = useState<boolean>(navigator.onLine);
 
   // UI State
   const [showSettings, setShowSettings] = useState(false);
@@ -42,12 +45,27 @@ const App = () => {
     setLinksMap((prev) => ({ ...prev, [lessonKey]: links }));
   }, [lessonKey, setLinksMap]);
 
+  const handleDownloadOfflinePackage = useCallback(() => {
+    downloadOfflinePackage(curriculumData, memos, linksMap);
+  }, [curriculumData, memos, linksMap]);
+
   // Load custom curriculum on mount if exists
   useEffect(() => {
     const stored = window.localStorage.getItem('curriculumData');
     if (stored) {
         try { setCurriculumData(JSON.parse(stored)); } catch(e) {}
     }
+  }, []);
+
+  useEffect(() => {
+    const onOnline = () => setIsNetworkOnline(true);
+    const onOffline = () => setIsNetworkOnline(false);
+    window.addEventListener('online', onOnline);
+    window.addEventListener('offline', onOffline);
+    return () => {
+      window.removeEventListener('online', onOnline);
+      window.removeEventListener('offline', onOffline);
+    };
   }, []);
 
   return (
@@ -106,6 +124,30 @@ const App = () => {
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2"><Music className="w-8 h-8" /> 두드림 리듬 탐험대</h1>
                 <p className="mt-1 text-orange-100 print:text-gray-600 font-medium text-sm md:text-base">초등돌봄교실 특기적성 프로그램 (강사: 김경미)</p>
+                <div className="mt-2 flex flex-wrap items-center gap-2 print:hidden">
+                  <button
+                    onClick={() => setAppMode('online')}
+                    className={`px-3 py-1 rounded-full text-xs font-bold border ${appMode === 'online' ? 'bg-green-600 border-green-600 text-white' : 'bg-white/20 border-white/50 text-white'}`}
+                  >
+                    온라인 모드
+                  </button>
+                  <button
+                    onClick={() => setAppMode('offline')}
+                    className={`px-3 py-1 rounded-full text-xs font-bold border ${appMode === 'offline' ? 'bg-stone-800 border-stone-800 text-white' : 'bg-white/20 border-white/50 text-white'}`}
+                  >
+                    오프라인 모드
+                  </button>
+                  <span className="text-xs px-2 py-1 rounded-full bg-white/20">
+                    네트워크: {isNetworkOnline ? '연결됨' : '끊김'}
+                  </span>
+                  <button
+                    onClick={handleDownloadOfflinePackage}
+                    className="px-3 py-1 rounded-full text-xs font-bold border bg-white/20 border-white/50 text-white hover:bg-white/30 flex items-center gap-1"
+                    title="현재 수업 데이터를 태블릿에서 열 수 있는 단일 HTML로 저장"
+                  >
+                    <Download size={12} /> 오프라인 파일 저장
+                  </button>
+                </div>
               </div>
               <div className="flex gap-2 print:hidden">
                   <button onClick={() => setShowClassroomMode(true)} className="flex items-center gap-1 px-4 py-2 bg-stone-800 hover:bg-stone-900 rounded-full transition-colors text-white font-bold shadow-lg">
@@ -177,6 +219,7 @@ const App = () => {
                     lessonPlan={lessonPlan}
                     selectedMonth={selectedMonth}
                     selectedWeek={selectedWeek}
+                    appMode={appMode}
                     memo={memos[lessonKey] || ''}
                     onMemoChange={handleMemoChange}
                     links={linksMap[lessonKey] || []}
