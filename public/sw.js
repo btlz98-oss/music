@@ -1,5 +1,11 @@
-const CACHE_NAME = 'rhythm-explorer-v1';
-const APP_SHELL = ['/', '/index.html', '/index.css'];
+const CACHE_NAME = 'rhythm-explorer-v3';
+const OFFLINE_HTML = new URL('index.html', self.registration.scope).toString();
+const OFFLINE_CSS = new URL('index.css', self.registration.scope).toString();
+
+const toCache = (request, response) => {
+  if (!response || response.status !== 200 || response.type === 'opaque') return;
+  caches.open(CACHE_NAME).then((cache) => cache.put(request, response.clone()));
+};
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -20,23 +26,33 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request)
+  const { request } = event;
+  const requestUrl = new URL(request.url);
+  const isSameOrigin = requestUrl.origin === self.location.origin;
+
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
         .then((response) => {
-          if (event.request.url.startsWith(self.location.origin)) {
-            const cloned = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned));
-          }
+          toCache(request, response);
           return response;
         })
-        .catch(() => {
-          if (event.request.mode === 'navigate') {
-            return caches.match('/index.html');
-          }
-          return cached;
-        });
-    })
+        .catch(() => caches.match(request).then((cached) => cached || caches.match(OFFLINE_HTML)))
+    );
+    return;
+  }
+
+  if (!isSameOrigin) {
+    event.respondWith(fetch(request).catch(() => caches.match(request)));
+    return;
+  }
+
+  event.respondWith(
+    fetch(request)
+      .then((response) => {
+        toCache(request, response);
+        return response;
+      })
+      .catch(() => caches.match(request))
   );
 });
