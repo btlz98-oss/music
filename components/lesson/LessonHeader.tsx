@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Info } from 'lucide-react';
 import { LessonPlan } from '../../types';
-import { getOfflineInstrumentImage } from '../../utils/instrumentImage';
+import { getOfflineInstrumentImage, getOnlineInstrumentImage } from '../../utils/instrumentImage';
 
 interface LessonHeaderProps {
   lessonPlan: LessonPlan;
@@ -18,9 +18,21 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
   appMode,
   onShowInstrumentModal
 }) => {
-  const imageSrc = appMode === 'offline'
-    ? getOfflineInstrumentImage(lessonPlan.instrumentName)
-    : (lessonPlan.refData.imageUrl || getOfflineInstrumentImage(lessonPlan.instrumentName));
+  const onlineFallback = useMemo(() => getOnlineInstrumentImage(lessonPlan.instrumentName), [lessonPlan.instrumentName]);
+  const offlineSrc = useMemo(() => getOfflineInstrumentImage(lessonPlan.instrumentName), [lessonPlan.instrumentName]);
+
+  const prefersLocalPlaceholder = lessonPlan.refData.imageUrl === '/instrument-placeholder.svg';
+  const onlineSrc = prefersLocalPlaceholder
+    ? onlineFallback
+    : (lessonPlan.refData.imageUrl || onlineFallback);
+
+  const [hasImageError, setHasImageError] = useState(false);
+
+  useEffect(() => {
+    setHasImageError(false);
+  }, [lessonPlan.instrumentName, appMode]);
+
+  const imageSrc = appMode === 'offline' ? offlineSrc : (hasImageError ? onlineFallback : onlineSrc);
 
   return (
     <div className="border-b-2 border-stone-800 pb-4 mb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
@@ -31,6 +43,7 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
             alt={lessonPlan.instrumentName}
             loading="lazy"
             className="w-24 h-24 rounded-2xl object-cover border border-stone-200 shadow-sm hidden sm:block print:hidden"
+            onError={() => setHasImageError(true)}
           />
         )}
         <div>

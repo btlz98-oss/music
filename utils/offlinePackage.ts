@@ -22,7 +22,7 @@ export const downloadOfflinePackage = (
     return curriculumData[month] || defaultCurriculumData[month];
   };
 
-  const sections = monthOrder
+  const lessonMap = monthOrder
     .map((month) => {
       const monthData = pickMonthData(month);
       const instKey = monthData.instKey || '신체 타악기';
@@ -39,6 +39,9 @@ export const downloadOfflinePackage = (
           const main = LessonService.generateIntegratedMain(weekData.week, instKey, theme);
           const conclusion = LessonService.generateConclusion(weekData.week);
           const safety = LessonService.getSafetyRule(weekData.week, instKey);
+          const materials = LessonService.getMaterials(weekData.week, instKey);
+          const tip = LessonService.getTeacherTip(weekData.week);
+          const terms = LessonService.getTerms(instKey, weekData.week);
           const memo = memos[key] || '';
           const links = linksMap[key] || [];
           const history = instrumentHistories[instKey] || '';
@@ -109,7 +112,13 @@ export const downloadOfflinePackage = (
     })
     .join('');
 
-  const toc = monthOrder.map((month) => `<a href="#m${month}">${month}월</a>`).join(' · ');
+  const monthOptions = monthOrder
+    .map((month) => `<option value="${month}">${month}월 - ${escapeHtml(pickMonthData(month).theme)}</option>`)
+    .join('');
+
+  const monthButtons = monthOrder
+    .map((month) => `<button class="month-btn" data-month-btn="${month}">${month}월</button>`)
+    .join('');
 
   const html = `<!doctype html>
 <html lang="ko">
@@ -250,7 +259,7 @@ export const downloadOfflinePackage = (
   const link = document.createElement('a');
   const url = URL.createObjectURL(blob);
   link.href = url;
-  link.download = `rhythm_explorer_full_offline_${new Date().toISOString().slice(0, 10)}.html`;
+  link.download = 'index.html';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

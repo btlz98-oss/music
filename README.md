@@ -18,14 +18,31 @@ View your app in AI Studio: https://ai.studio/apps/drive/1AZ7n_qVBZk_zJYkwhHx2uU
 3. Run the app:
    `npm run dev`
 
+
+## Deploy (main branch 기반, gh-pages 브랜치 미사용)
+
+이 프로젝트는 이제 **main 브랜치 push 시 GitHub Actions로 Pages 배포**하도록 설정했습니다.
+구형 `gh-pages` 브랜치/`npm run deploy` 방식은 제거되었습니다.
+
+### 1) GitHub 저장소 설정
+1. GitHub 저장소 → **Settings → Pages**
+2. **Source**를 `GitHub Actions`로 선택
+
+### 2) 배포 방법
+- `main` 브랜치에 머지/푸시하면 자동 배포됩니다.
+- 수동 배포가 필요하면 **Actions → Deploy to GitHub Pages (main branch) → Run workflow**를 실행하세요.
+
+### 3) 워크플로 파일
+- `.github/workflows/deploy-pages.yml`
+- 빌드 산출물 `dist`를 Pages artifact로 업로드 후 배포합니다.
+
 ## Tablet offline usage guide
 
 You can use this app on a tablet **without internet after the first setup**, but there are a few conditions.
 
 ### Current limitations in this project
 - The app currently loads Tailwind CSS from a CDN script (`https://cdn.tailwindcss.com`) in `index.html`.
-- It also loads a Google Font from `fonts.googleapis.com`.
-- Instrument thumbnail images are external URLs (`https://placehold.co/...`).
+- Instrument thumbnail images are now bundled as local SVG assets (`public/instrument-placeholder.svg`).
 
 Because of these external resources, first load requires internet. Full guaranteed offline experience needs local bundling of those assets plus a service worker.
 
@@ -48,9 +65,16 @@ Then the app can open reliably without network.
 - In 오프라인 모드:
   - instrument thumbnail is switched to built-in SVG image (no external image request),
   - external resource links are disabled to avoid dead clicks,
-  - current mode is persisted in localStorage.
+- In 온라인 모드:
+  - instrument thumbnail uses online-style artwork and falls back safely if image loading fails,
+- Current mode is persisted in localStorage.
 - Service worker (`public/sw.js`) is registered to cache app shell and visited local assets for repeat offline launches.
 - Added **연간 오프라인 저장** export (header + settings modal) that downloads a single HTML package containing **3월~2월 전체 주차(1~4주)** lesson content, memos, and saved links as text.
 - Downloaded HTML can be moved to tablet via AirDrop/파일 앱/메신저 and opened directly in browser offline.
 
 > Note: this is a practical offline mode. Some third-party resources in `index.html` are still external, so first load/update still works best online.
+
+
+### Deployment cache note
+If a newly deployed screen looks identical to an old one, the browser may still be serving cached JS from a previous service worker.
+This project now uses a network-first strategy for same-origin assets in `public/sw.js` and forces a service worker update check in `index.tsx` on load so new deployments apply more reliably.
