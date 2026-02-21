@@ -103,6 +103,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // ⭐️ 데이터 백업/복구 로직
@@ -115,11 +116,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     };
     const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob);
+    link.href = url;
     link.download = `rhythm_explorer_backup_${new Date().toISOString().slice(0,10)}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const importData = (e: React.ChangeEvent<HTMLInputElement>) => {
