@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Instrument placeholder">
-  <rect width="200" height="200" rx="24" fill="#FFF7ED"/>
-  <circle cx="100" cy="88" r="34" fill="#FDBA74"/>
-  <rect x="63" y="132" width="74" height="14" rx="7" fill="#C2410C"/>
-  <text x="100" y="178" text-anchor="middle" font-size="14" font-family="Arial, sans-serif" fill="#9A3412">Instrument</text>
-</svg>
