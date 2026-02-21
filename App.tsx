@@ -164,6 +164,25 @@ const App = () => {
             </div>
           </div>
 
+          <div className="px-4 sm:px-6 pb-6 print:hidden">
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-sm text-amber-900 leading-relaxed space-y-3">
+              <p className="font-bold">비행기 모드 태블릿 사용 순서</p>
+              <ol className="list-decimal pl-5 space-y-1">
+                <li>인터넷이 연결된 상태에서 이 페이지를 한 번 이상 열어 캐시를 만드세요. (오프라인 준비 완료 확인)</li>
+                <li>"태블릿에 앱 저장"으로 홈 화면 앱을 설치하세요.</li>
+                <li>"연간 오프라인 저장" 버튼을 눌러 <strong>월/주차 전체 포함 HTML</strong>을 파일앱에 저장하세요.</li>
+                <li>비행기 모드에서는 홈 화면 앱을 열거나, 파일앱에서 저장한 HTML을 열어 확인하세요.</li>
+              </ol>
+              <div className="bg-white/70 border border-amber-200 rounded-xl p-3">
+                <p className="font-semibold">오프라인 다운로드 파일 활용 팁</p>
+                <ul className="list-disc pl-5 mt-1 space-y-1">
+                  <li>다운로드 파일 상단에서 <strong>월/주차를 선택</strong>해 필요한 수업만 빠르게 볼 수 있습니다.</li>
+                  <li>"전체 월" + "전체 주차"로 두면 연간 내용을 한 번에 확인할 수 있습니다.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
           {/* ⭐️ Month/Week Selection */}
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 print:hidden">
             <div className="bg-[#FFFBEB] p-6 rounded-2xl border border-stone-100 shadow-sm flex flex-col md:flex-row gap-8 md:gap-12 items-start">
