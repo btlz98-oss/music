@@ -50,5 +50,6 @@ Then the app can open reliably without network.
   - external resource links are disabled to avoid dead clicks,
   - current mode is persisted in localStorage.
 - Service worker (`public/sw.js`) is registered to cache app shell and visited local assets for repeat offline launches.
+- Added **오프라인 파일 저장** button that downloads a self-contained HTML package with all monthly/weekly lesson content, memos, and saved links as text.
 
 > Note: this is a practical offline mode. Some third-party resources in `index.html` are still external, so first load/update still works best online.

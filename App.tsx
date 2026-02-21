@@ -8,6 +8,7 @@ import { ClassroomModeDisplay } from './components/ClassroomModeDisplay';
 import { ResourceLink } from './components/lesson/ResourceSection';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useLessonPlanGenerator } from './hooks/useLessonPlanGenerator';
+import { downloadOfflinePackage } from './utils/offlinePackage';
 
 const App = () => {
   // ⭐️ Data Persistence
@@ -43,6 +44,10 @@ const App = () => {
   const handleLinksChange = useCallback((links: ResourceLink[]) => {
     setLinksMap((prev) => ({ ...prev, [lessonKey]: links }));
   }, [lessonKey, setLinksMap]);
+
+  const handleDownloadOfflinePackage = useCallback(() => {
+    downloadOfflinePackage(curriculumData, memos, linksMap);
+  }, [curriculumData, memos, linksMap]);
 
   // Load custom curriculum on mount if exists
   useEffect(() => {
@@ -135,6 +140,13 @@ const App = () => {
                   <span className="text-xs px-2 py-1 rounded-full bg-white/20">
                     네트워크: {isNetworkOnline ? '연결됨' : '끊김'}
                   </span>
+                  <button
+                    onClick={handleDownloadOfflinePackage}
+                    className="px-3 py-1 rounded-full text-xs font-bold border bg-white/20 border-white/50 text-white hover:bg-white/30 flex items-center gap-1"
+                    title="현재 수업 데이터를 태블릿에서 열 수 있는 단일 HTML로 저장"
+                  >
+                    <Download size={12} /> 오프라인 파일 저장
+                  </button>
                 </div>
               </div>
               <div className="flex gap-2 print:hidden">
