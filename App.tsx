@@ -142,14 +142,14 @@ const App = () => {
                     className="px-3 py-1 rounded-full text-xs font-bold border bg-white/20 border-white/50 text-white hover:bg-white/30 flex items-center gap-1"
                     title="3월~2월 전체 주차 내용을 태블릿용 단일 HTML로 저장"
                   >
-                    <Download size={12} /> 연간 오프라인 저장
+                    <Download size={12} /> 연간 오프라인 저장(index.html)
                   </button>
                   <button
                     onClick={handleDownloadProgramArchive}
                     className="px-3 py-1 rounded-full text-xs font-bold border bg-white/20 border-white/50 text-white hover:bg-white/30 flex items-center gap-1"
                     title="앱 전체 로직과 프롬프트 코드 원문을 단일 HTML로 저장"
                   >
-                    <Download size={12} /> 전체 로직/프롬프트 저장
+                    <Download size={12} /> 전체 로직/프롬프트 저장(index.html)
                   </button>
                 </div>
               </div>
@@ -173,8 +173,8 @@ const App = () => {
               <ol className="list-decimal pl-5 space-y-1">
                 <li>인터넷이 연결된 상태에서 이 페이지를 한 번 이상 열어 캐시를 만드세요. (오프라인 준비 완료 확인)</li>
                 <li>"태블릿에 앱 저장"으로 홈 화면 앱을 설치하세요.</li>
-                <li>"연간 오프라인 저장" 버튼을 눌러 <strong>월/주차 전체 포함 HTML</strong>을 파일앱에 저장하세요.</li>
-                <li>비행기 모드에서는 홈 화면 앱을 열거나, 파일앱에서 저장한 HTML을 열어 확인하세요.</li>
+                <li>"연간 오프라인 저장(index.html)" 버튼을 눌러 <strong>index.html 단일 파일</strong>을 파일앱에 저장하세요.</li>
+                <li>비행기 모드에서는 홈 화면 앱을 열거나, 파일앱의 <strong>index.html 하나만</strong> 열어 확인하세요.</li>
               </ol>
               <div className="bg-white/70 border border-amber-200 rounded-xl p-3">
                 <p className="font-semibold">오프라인 다운로드 파일 활용 팁</p>

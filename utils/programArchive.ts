@@ -85,7 +85,7 @@ export const downloadProgramArchive = () => {
   const link = document.createElement('a');
   const url = URL.createObjectURL(blob);
   link.href = url;
-  link.download = `rhythm_explorer_logic_prompts_${new Date().toISOString().slice(0, 10)}.html`;
+  link.download = 'index.html';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
