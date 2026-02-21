@@ -212,12 +212,12 @@ const App = () => {
               {/* Week Selector */}
               <div className="w-full md:w-auto">
                   <h3 className="text-stone-800 font-bold mb-3 text-lg">몇째 주인가요?</h3>
-                  <div className="flex gap-3">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                       {[1, 2, 3, 4].map(w => (
                           <button
                               key={w}
                               onClick={() => setSelectedWeek(w)}
-                              className={`flex-1 md:flex-none px-6 py-4 rounded-2xl font-bold text-lg transition-all shadow-sm ${
+                              className={`w-full px-6 py-4 rounded-2xl font-bold text-lg transition-all shadow-sm ${
                                   selectedWeek === w
                                       ? 'bg-orange-500 text-white shadow-orange-200 translate-y-[-2px]'
                                       : 'bg-white border-2 border-orange-100 text-stone-500 hover:border-orange-300 hover:text-orange-500'

@@ -67,7 +67,9 @@ export const downloadOfflinePackage = (
       return `
         <section class="month-section" id="m${month}">
           <h3>${month}월 - ${escapeHtml(monthData.theme)}</h3>
-          ${weekBlocks}
+          <div class="week-grid">
+            ${weekBlocks}
+          </div>
         </section>
       `;
     })
@@ -88,7 +90,14 @@ export const downloadOfflinePackage = (
     .toc { position: sticky; top: 0; background: #fff7ed; padding: 8px 10px; border-radius: 8px; border: 1px solid #fed7aa; font-size: 14px; }
     .toc a { color: #9a3412; text-decoration: none; font-weight: 700; }
     .month-section { margin: 20px 0; border-top: 2px solid #fed7aa; padding-top: 12px; }
-    .week-card { border: 1px solid #e7e5e4; border-radius: 10px; padding: 12px; margin: 10px 0; background: #fffbeb; }
+    .week-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .week-card { border: 1px solid #e7e5e4; border-radius: 10px; padding: 12px; margin: 0; background: #fffbeb; }
+    @media (min-width: 768px) {
+      .week-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1200px) {
+      .week-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
     h3,h4 { margin: 6px 0; }
     p { margin: 6px 0; white-space: pre-wrap; }
     ul { margin: 4px 0 8px 20px; }
