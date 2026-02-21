@@ -127,62 +127,23 @@ export const downloadOfflinePackage = (
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>두드림 리듬 탐험대 오프라인 패키지</title>
   <style>
-    :root {
-      --bg: #f5f5f4;
-      --card: #ffffff;
-      --border: #e7e5e4;
-      --orange: #f97316;
-      --text: #1c1917;
-    }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
-    .app-header { background: #fb923c; color: #fff; padding: 20px 16px; }
-    .app-header h1 { margin: 0 0 6px; font-size: 28px; }
-    .desc { margin: 0; opacity: 0.95; }
-    .layout { max-width: 1200px; margin: 0 auto; padding: 16px; }
-    .toc { position: sticky; top: 8px; z-index: 10; margin-bottom: 12px; background: #fff7ed; padding: 10px 12px; border-radius: 12px; border: 1px solid #fed7aa; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.5; margin: 16px; color: #1c1917; }
+    h1 { margin-bottom: 4px; }
+    .desc { color: #57534e; margin-bottom: 16px; }
+    .toc { position: sticky; top: 0; background: #fff7ed; padding: 8px 10px; border-radius: 8px; border: 1px solid #fed7aa; font-size: 14px; }
     .toc a { color: #9a3412; text-decoration: none; font-weight: 700; }
-    .controls { background: #fffbeb; border: 1px solid #fde68a; border-radius: 14px; padding: 12px; margin-bottom: 16px; }
-    .controls h4 { margin: 0 0 10px; font-size: 16px; }
-    .controls-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    .month-select { width: 100%; padding: 10px 12px; border: 2px solid #fdba74; border-radius: 12px; font-size: 16px; font-weight: 700; color: #44403c; background: #fff; }
-    .week-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-    .week-btn { border: 2px solid #fed7aa; background: #fff; color: #57534e; border-radius: 12px; padding: 10px; font-weight: 700; cursor: pointer; }
-    .week-btn.active { background: #f97316; border-color: #f97316; color: #fff; }
-    .month-section { margin: 20px 0; }
-    .month-section h3 { margin: 0 0 10px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 14px; padding: 12px 14px; }
-
-    .week-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-    .week-card { border: 1px solid var(--border); border-radius: 16px; padding: 14px; background: var(--card); box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
-    .lesson-head h4 { margin: 8px 0 6px; font-size: 24px; line-height: 1.25; }
-    .objective { margin: 0; color: #44403c; font-weight: 600; }
-
-    .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
-    .chip { border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700; border: 1px solid transparent; }
-    .chip-week { color: #c2410c; background: #ffedd5; border-color: #fdba74; }
-    .chip-inst { color: #1d4ed8; background: #dbeafe; border-color: #93c5fd; }
-    .chip-focus { color: #166534; background: #dcfce7; border-color: #86efac; }
-
-    .lesson-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
-    .panel { border: 1px solid #e5e7eb; border-radius: 12px; padding: 10px; background: #fff; }
-    .panel.soft { background: #f8fafc; }
-    .panel.warning { background: #fff7ed; border-color: #fed7aa; }
-    .panel h5 { margin: 0 0 8px; color: #111827; font-size: 15px; }
-    .panel p { margin: 0 0 6px; white-space: pre-wrap; }
-    .panel ul { margin: 0; padding-left: 18px; }
-    .panel li { margin-bottom: 6px; }
-    .activity-box { margin: 8px 0; }
-
+    .month-section { margin: 20px 0; border-top: 2px solid #fed7aa; padding-top: 12px; }
+    .week-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .week-card { border: 1px solid #e7e5e4; border-radius: 10px; padding: 12px; margin: 0; background: #fffbeb; }
     @media (min-width: 768px) {
-      .layout { padding: 20px; }
-      .controls-grid { grid-template-columns: 1.2fr 1fr; align-items: end; }
-      .week-buttons { grid-template-columns: repeat(4, minmax(0, 1fr)); }
       .week-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .lesson-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (min-width: 1200px) {
       .week-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
+    h3,h4 { margin: 6px 0; }
+    p { margin: 6px 0; white-space: pre-wrap; }
+    ul { margin: 4px 0 8px 20px; }
   </style>
 </head>
 <body>
