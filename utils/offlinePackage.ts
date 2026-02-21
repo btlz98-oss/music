@@ -249,7 +249,7 @@ export const downloadOfflinePackage = (
   const link = document.createElement('a');
   const url = URL.createObjectURL(blob);
   link.href = url;
-  link.download = 'index.html';
+  link.download = `rhythm_explorer_full_offline_${new Date().toISOString().slice(0, 10)}.html`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
