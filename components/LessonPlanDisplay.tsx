@@ -38,10 +38,10 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
         />
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           {/* Left Column: Info & Ref & Terms & Resources */}
-          <div className="md:col-span-2 lg:col-span-1 space-y-6">
+          <div className="md:col-span-1 space-y-6">
             
             {/* 학습 목표 */}
             <div className="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm">
@@ -96,7 +96,7 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({
           </div>
 
           {/* Right Column: Detailed Lesson Plan (Wider now because the outer sidebar is removed) */}
-          <div className="md:col-span-2 lg:col-span-2 space-y-6">
+          <div className="md:col-span-2 space-y-6">
             
             {/* Intro */}
             <div>

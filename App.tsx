@@ -215,7 +215,7 @@ const App = () => {
               {/* Week Selector */}
               <div className="w-full md:w-auto">
                   <h3 className="text-stone-800 font-bold mb-3 text-lg">몇째 주인가요?</h3>
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       {[1, 2, 3, 4].map(w => (
                           <button
                               key={w}
