@@ -10,6 +10,12 @@ import { useLocalStorage } from './hooks/useLocalStorage';
 import { useLessonPlanGenerator } from './hooks/useLessonPlanGenerator';
 import { downloadOfflinePackage } from './utils/offlinePackage';
 
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
 const App = () => {
   // ⭐️ Data Persistence
   const [selectedMonth, setSelectedMonth] = useLocalStorage<number>('lessonMonth', 3);
@@ -18,6 +24,8 @@ const App = () => {
   const [linksMap, setLinksMap] = useLocalStorage<Record<string, ResourceLink[]>>('lessonLinks', {});
   const [appMode, setAppMode] = useLocalStorage<'online' | 'offline'>('appMode', 'online');
   const [isNetworkOnline, setIsNetworkOnline] = useState<boolean>(navigator.onLine);
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isOfflineReady, setIsOfflineReady] = useState(false);
 
   // UI State
   const [showSettings, setShowSettings] = useState(false);
@@ -49,6 +57,13 @@ const App = () => {
     downloadOfflinePackage(curriculumData, memos, linksMap);
   }, [curriculumData, memos, linksMap]);
 
+  const handleInstallApp = useCallback(async () => {
+    if (!installPrompt) return;
+    await installPrompt.prompt();
+    await installPrompt.userChoice;
+    setInstallPrompt(null);
+  }, [installPrompt]);
+
   // Load custom curriculum on mount if exists
   useEffect(() => {
     const stored = window.localStorage.getItem('curriculumData');
@@ -65,6 +80,34 @@ const App = () => {
     return () => {
       window.removeEventListener('online', onOnline);
       window.removeEventListener('offline', onOffline);
+    };
+  }, []);
+
+  useEffect(() => {
+    const onBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallPrompt(event as BeforeInstallPromptEvent);
+    };
+
+    const onAppInstalled = () => {
+      setInstallPrompt(null);
+    };
+
+    const onServiceWorkerReady = () => {
+      setIsOfflineReady(true);
+    };
+
+    if (navigator.serviceWorker?.controller) {
+      setIsOfflineReady(true);
+    }
+
+    navigator.serviceWorker?.ready.then(onServiceWorkerReady).catch(() => {});
+    window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt);
+    window.addEventListener('appinstalled', onAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', onAppInstalled);
     };
   }, []);
 
@@ -140,6 +183,17 @@ const App = () => {
                   <span className="text-xs px-2 py-1 rounded-full bg-white/20">
                     네트워크: {isNetworkOnline ? '연결됨' : '끊김'}
                   </span>
+                  <span className={`text-xs px-2 py-1 rounded-full ${isOfflineReady ? 'bg-emerald-600/80' : 'bg-white/20'}`}>
+                    오프라인 준비: {isOfflineReady ? '완료' : '동기화 중'}
+                  </span>
+                  <button
+                    onClick={handleInstallApp}
+                    disabled={!installPrompt}
+                    className={`px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-1 ${installPrompt ? 'bg-white/20 border-white/50 text-white hover:bg-white/30' : 'bg-white/10 border-white/30 text-orange-100 cursor-not-allowed'}`}
+                    title="홈 화면에 앱을 추가하면 태블릿에서도 앱처럼 실행할 수 있습니다"
+                  >
+                    태블릿에 앱 저장
+                  </button>
                   <button
                     onClick={handleDownloadOfflinePackage}
                     className="px-3 py-1 rounded-full text-xs font-bold border bg-white/20 border-white/50 text-white hover:bg-white/30 flex items-center gap-1"
@@ -159,6 +213,25 @@ const App = () => {
                   <button onClick={() => setShowSettings(true)} className="p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors" title="설정 및 백업">
                       <Settings size={24} className="text-white" />
                   </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="px-4 sm:px-6 pb-6 print:hidden">
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-sm text-amber-900 leading-relaxed space-y-3">
+              <p className="font-bold">비행기 모드 태블릿 사용 순서</p>
+              <ol className="list-decimal pl-5 space-y-1">
+                <li>인터넷이 연결된 상태에서 이 페이지를 한 번 이상 열어 캐시를 만드세요. (오프라인 준비 완료 확인)</li>
+                <li>"태블릿에 앱 저장"으로 홈 화면 앱을 설치하세요.</li>
+                <li>"연간 오프라인 저장" 버튼을 눌러 <strong>월/주차 전체 포함 HTML</strong>을 파일앱에 저장하세요.</li>
+                <li>비행기 모드에서는 홈 화면 앱을 열거나, 파일앱에서 저장한 HTML을 열어 확인하세요.</li>
+              </ol>
+              <div className="bg-white/70 border border-amber-200 rounded-xl p-3">
+                <p className="font-semibold">오프라인 다운로드 파일 활용 팁</p>
+                <ul className="list-disc pl-5 mt-1 space-y-1">
+                  <li>다운로드 파일 상단에서 <strong>월/주차를 선택</strong>해 필요한 수업만 빠르게 볼 수 있습니다.</li>
+                  <li>"전체 월" + "전체 주차"로 두면 연간 내용을 한 번에 확인할 수 있습니다.</li>
+                </ul>
               </div>
             </div>
           </div>
