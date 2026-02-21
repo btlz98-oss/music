@@ -24,7 +24,8 @@ You can use this app on a tablet **without internet after the first setup**, but
 
 ### Current limitations in this project
 - The app currently loads Tailwind CSS from a CDN script (`https://cdn.tailwindcss.com`) in `index.html`.
-- Instrument thumbnail images are now bundled as local SVG assets (`public/instrument-placeholder.svg`).
+- It also loads a Google Font from `fonts.googleapis.com`.
+- Instrument thumbnail images are external URLs (`https://placehold.co/...`).
 
 Because of these external resources, first load requires internet. Full guaranteed offline experience needs local bundling of those assets plus a service worker.
 
